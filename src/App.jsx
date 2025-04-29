@@ -1,23 +1,94 @@
-import Home from "./components/Home"
+import { useState, useEffect } from 'react';
+import GameBoard from './components/GameBoard';
+import Scoreboard from './components/Scoreboard';
+import GameOver from './components/GameOver';
 
 function App() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(
+    parseInt(localStorage.getItem('highScore')) || 0
+  );
+  const [gameSpeed, setGameSpeed] = useState(1000);
+  const [showGameOver, setShowGameOver] = useState(false);
+
+  useEffect(() => {
+    if (score > highScore) {
+      setHighScore(score);
+      localStorage.setItem('highScore', score.toString());
+    }
+  }, [score, highScore]);
+
+  const handleGameOver = () => {
+    setIsPlaying(false);
+    setShowGameOver(true);
+    setGameSpeed(1000);
+  };
+
+  const startGame = () => {
+    setScore(0);
+    setIsPlaying(true);
+    setShowGameOver(false);
+  };
+
+  useEffect(() => {
+    if (isPlaying && score > 0) {
+      if (score % 5 === 0) {
+        setGameSpeed(prev => Math.max(prev * 0.9, 400));
+      }
+      // Add bonus speed increase at certain milestones
+      if (score % 10 === 0) {
+        setGameSpeed(prev => Math.max(prev * 0.95, 400));
+      }
+    }
+  }, [score, isPlaying]);
+
   return (
-    <>
-    <Home/>
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-        <div className="p-8">
-          <h1 className="text-2xl font-bold text-blue-600 mb-2">Hello Tailwind!</h1>
-          <p className="text-gray-600">This is a sample card with Tailwind CSS</p>
-          <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-            Click to me
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-6">
+      <div className="max-w-md mx-auto">
+        <h1 className="text-5xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Piano Tiles
+        </h1>
+        
+        <Scoreboard currentScore={score} highScore={highScore} />
+        
+        <GameBoard
+          isPlaying={isPlaying}
+          onGameOver={handleGameOver}
+          onScoreUpdate={setScore}
+          speed={gameSpeed}
+        />
+
+        {!showGameOver && (
+          <button
+            onClick={startGame}
+            className="mt-8 w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-purple-500 
+              text-white rounded-xl font-bold text-lg tracking-wide
+              hover:from-blue-600 hover:to-purple-600 
+              transform transition-all duration-200 hover:scale-105
+              focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50
+              shadow-lg hover:shadow-xl"
+          >
+            {isPlaying ? 'Restart Game' : 'Start Game'}
           </button>
-        </div>
+        )}
+
+        {isPlaying && (
+          <p className="text-center mt-4 text-gray-600">
+            Speed: {Math.round(1000/gameSpeed * 100)/100}x
+          </p>
+        )}
+
+        {showGameOver && (
+          <GameOver
+            score={score}
+            highScore={highScore}
+            onRestart={startGame}
+          />
+        )}
       </div>
     </div>
-    </>
-    
-  )
+  );
 }
 
-export default App
+export default App;
