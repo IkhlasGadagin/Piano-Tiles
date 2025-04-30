@@ -47,7 +47,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-6">
       <div className="max-w-md mx-auto">
         <h1 className="text-5xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Piano Tiles
+          Piano Tiles Game
         </h1>
         
         <Scoreboard currentScore={score} highScore={highScore} />
