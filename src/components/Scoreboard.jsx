@@ -6,21 +6,27 @@
 // );
 
 // export default Scoreboard;
-const Scoreboard = ({ currentScore, highScore }) => (
-  <div className="bg-white rounded-xl shadow-lg p-6 mb-8 transform hover:scale-105 transition-transform">
-    <div className="flex justify-between items-center">
-      <div className="space-y-2">
-        <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          {currentScore}
-        </div>
-        <div className="text-gray-500 text-sm uppercase tracking-wide">Current Score</div>
+const Scoreboard = ({ currentScore, highScore, averageScore, gamesPlayed }) => {
+  return (
+    <div className="grid grid-cols-2 gap-4 mb-8">
+      <div className="bg-white p-4 rounded-xl shadow-lg">
+        <div className="text-sm text-gray-600 mb-1">Current Score</div>
+        <div className="text-3xl font-bold text-blue-600">{currentScore}</div>
       </div>
-      <div className="space-y-2">
-        <div className="text-3xl font-bold text-gray-700">{highScore}</div>
-        <div className="text-gray-500 text-sm uppercase tracking-wide">High Score</div>
+      <div className="bg-white p-4 rounded-xl shadow-lg">
+        <div className="text-sm text-gray-600 mb-1">High Score</div>
+        <div className="text-3xl font-bold text-purple-600">{highScore}</div>
+      </div>
+      <div className="bg-white p-4 rounded-xl shadow-lg">
+        <div className="text-sm text-gray-600 mb-1">Average Score</div>
+        <div className="text-3xl font-bold text-green-600">{averageScore}</div>
+      </div>
+      <div className="bg-white p-4 rounded-xl shadow-lg">
+        <div className="text-sm text-gray-600 mb-1">Games Played</div>
+        <div className="text-3xl font-bold text-orange-600">{gamesPlayed}</div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Scoreboard;
